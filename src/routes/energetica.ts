@@ -3,6 +3,6 @@ import { createEnergeticaHandler } from "../controllers/energetica.js";
 
 const router = express.Router();
 
-router.post("/data", createEnergeticaHandler);
+router.post("/register", createEnergeticaHandler);
 
 export default router;

@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 dotenv.config({ quiet: true });
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 app.use(express.json());
 
@@ -20,10 +20,10 @@ app.get("/pubKey", (_req,res) => {
 //Rutas de prueba
 
 app.get("/", (_req,res) => {
-  res.send(("welcome to the PD G3 Backend!"));
+  res.send(("welcome to the energetica!"));
 })
 app.post("/", (_req,res) => {
-  res.send(("good post to the PD G3 Backend!"));
+  res.send(("good post to the energetica!"));
 })
 
 mongoose

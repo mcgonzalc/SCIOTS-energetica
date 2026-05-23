@@ -7,7 +7,7 @@
   "type": "module",
   "main": "src/serverEnergetica.js",
   "scripts": {
-    "dev": "tsx src/server.ts",
+    "dev": "tsx src/serverEnergetica.ts",
     "build": "tsc",
     "start": "tsc && node dist/serverEnergetica.js"
   },
