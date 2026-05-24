@@ -36,7 +36,7 @@ export const issueAuthCode = async (
 };
 
 /**
- * Paso 4 (para más adelante): canjea el auth_code por el access token.
+ * Paso 4: canjea el auth_code por el access token.
  * Marca el código como usado para impedir su reutilización.
  */
 export const consumeAuthCode = async (
