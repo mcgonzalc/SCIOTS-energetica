@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { issueAuthCode } from "../services/energeticaAuth.js";
+import {
+  issueAuthCode,
+  consumeAuthCode,
+  issueAccessToken,
+} from "../services/energeticaAuth.js";
 
 /** Escapa valores antes de inyectarlos en el HTML de la pantalla de consentimiento. */
 function esc(value: string): string {
@@ -84,6 +88,51 @@ export const grantConsentHandler = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ message: "Error al conceder el consentimiento", error });
+  }
+};
+
+/**
+ * Paso 4 → 5 — token endpoint.
+ * POST /token { code }: el Device canjea el auth_code. La Energética lo
+ * valida (un solo uso) y devuelve el access token firmado con la privada.
+ */
+export const tokenHandler = async (req: Request, res: Response) => {
+  try {
+    const code = (req.body?.code ?? "") as string;
+    if (!code) {
+      res.status(400).json({ error: "invalid_request", message: "Falta el code" });
+      return;
+    }
+
+    const authCode = await consumeAuthCode(code);
+    if (!authCode) {
+      res.status(400).json({
+        error: "invalid_grant",
+        message: "auth_code inválido, caducado o ya usado",
+      });
+      return;
+    }
+
+    const token = issueAccessToken({
+      deviceId: authCode.deviceId,
+      serial: authCode.serial,
+    });
+
+    console.log(
+      `[Energética] Paso 4-5 → access token firmado emitido para device ${authCode.deviceId}`
+    );
+
+    res.status(200).json({
+      access_token: token.accessToken,
+      signature: token.signature,
+      token_type: "bearer",
+      expires_in: token.expiresIn,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: "server_error",
+      message: "Error emitiendo el access token"
+    });
   }
 };
 
