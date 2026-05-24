@@ -17,7 +17,7 @@
     "mongoose": "^9.5.0",
     "express": "^5.2.1",
     "paillier-bigint": "^3.4.3",
-    "rsa": "file:../RSA"
+    "rsa": "file:../RSA-TS"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
