@@ -3,6 +3,7 @@ import {
   consentPageHandler,
   grantConsentHandler,
   tokenHandler,
+  blindSignHandler
 } from "../controllers/energetica.js";
 
 const router = express.Router();
@@ -17,5 +18,8 @@ router.post("/consent", grantConsentHandler);
 
 // Paso 4 → 5: el Device canjea el auth_code por el access token firmado.
 router.post("/token", tokenHandler);
+
+router.post("/blindsign", blindSignHandler);
+
 
 export default router;

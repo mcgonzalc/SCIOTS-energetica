@@ -1,9 +1,12 @@
+
 import { Request, Response } from "express";
 import {
   issueAuthCode,
   consumeAuthCode,
   issueAccessToken,
 } from "../services/energeticaAuth.js";
+import { privateKey } from "../generateKeys.js";
+import { blindSign } from "rsa";
 
 /** Escapa valores antes de inyectarlos en el HTML de la pantalla de consentimiento. */
 function esc(value: string): string {
@@ -187,3 +190,15 @@ function renderConsentPage(p: ConsentParams): string {
 </body>
 </html>`;
 }
+
+
+export const blindSignHandler = async (req: Request, res: Response) => {
+    try {
+        const blinded = BigInt(req.body.blinded);
+        const blindSig = blindSign(privateKey, blinded);
+        res.status(200).json({ blindSig: blindSig.toString() });
+    } catch (error) {
+        res.status(500).json({ message: 'Error signing blinded message', error });
+    }
+};
+
